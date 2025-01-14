@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathCraft – Crafting personalized career paths.</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #818cf8;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --accent: #f472b6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .navbar {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-container {
+            margin-top: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .career-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .career-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .career-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tag {
+            background: var(--secondary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Resume Builder Styles */
+        .resume-builder {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+        }
+
+        .dynamic-list {
+            margin-top: 1rem;
+        }
+
+        .list-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .resume-preview {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+        .search-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    gap: 10px;
+}
+
+#search-bar, #category-filter {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.career-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.career-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.career-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.career-card h3 {
+    margin: 10px 0;
+    color: #333;
+}
+
+.career-card p {
+    color: #555;
+    font-size: 14px;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">PathCraft</div>
+        <div class="nav-links">
+            <a href="#careers" onclick="showTab('careers', event)">Career Paths</a>
+            <a href="#resume" onclick="showTab('resume', event)">Resume Builder</a>
+            <a href="#resources" onclick="showTab('resources', event)">Resources</a>
+        </div>
+    </nav>
+    
+    
+    
+    
+    <div id="resources" class="tab-content" style="display: none;">
+        <!-- Resources content goes here -->
+        <h2>Resources</h2>
+        <p>Explore our educational resources.</p>
+    </div>
+    
+
+    <div class="hero">
+        <h1>Build Your Tech Career</h1>
+        <p>Explore career paths and create a professional resume</p>
+    </div>
+
+    <div class="container">
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('careers')">Career Paths</button>
+                <button class="tab" onclick="showTab('resume')">Resume Builder</button>
+            </div>
+
+            <div id="careers" class="tab-content">
+                <div class="career-cards" id="careerCards">
+                    <!-- Career cards will be inserted here -->
+                </div>
+            </div>
+
+            <div id="resume" class="tab-content" style="display: none;">
+                <div class="resume-builder">
+                    <h2>Resume Builder</h2>
+                    <form id="resumeForm">
+                        <div class="form-section">
+                            <h3>Personal Information</h3>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="fullName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" id="phone">
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Professional Summary</h3>
+                            <div class="form-group">
+                                <textarea id="summary" rows="4" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Skills</h3>
+                            <div class="form-group">
+                                <input type="text" id="skillInput" placeholder="Add a skill">
+                                <button type="button" class="btn" onclick="addSkill()">Add Skill</button>
+                            </div>
+                            <div id="skillsList" class="dynamic-list"></div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Experience</h3>
+                            <div class="form-group">
+                                <label>Company</label>
+                                <input type="text" id="companyInput">
+                                <label>Position</label>
+                                <input type="text" id="positionInput">
+                                <label>Duration</label>
+                                <input type="text" id="durationInput">
+                                <label>Description</label>
+                                <textarea id="experienceDescription" rows="3"></textarea>
+                                <button type="button" class="btn" onclick="addExperience()">Add Experience</button>
+                            </div>
+                            <div id="experienceList" class="dynamic-list"></div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="generateResume()">Generate Resume</button>
+                    </form>
+                </div>
+
+                <div id="resumePreview" class="resume-preview" style="display: none;">
+                    <!-- Resume preview will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Career path data
+        // Career path data
+const careerPaths = [
+    {
+        title: "Software Engineer",
+        image: "imgs/Software Engineer.svg",
+        description: "Design and develop software applications",
+        skills: ["Java", "Python", "JavaScript", "System Design"]
+    },
+    {
+        title: "Cybersecurity Specialist",
+        image: "imgs/cybersecurity.svg",
+        description: "Protect systems and networks from cyber threats",
+        skills: ["Network Security", "Ethical Hacking", "Risk Assessment"]
+    },
+    {
+        title: "Full Stack Developer",
+        image: "imgs/fullstack.svg",
+        description: "Build complete web applications",
+        skills: ["HTML/CSS", "JavaScript", "Node.js", "Databases"]
+    },
+    {
+        title: "Data Scientist",
+        image: "imgs/data-scientist.svg",
+        description: "Analyze complex data to find insights and drive decisions",
+        skills: ["Python", "R", "SQL", "Machine Learning"]
+    },
+    {
+        title: "Cloud Architect",
+        image: "imgs/cloud-up.svg",
+        description: "Design and manage cloud computing architecture and strategies",
+        skills: ["AWS", "Azure", "Google Cloud", "Networking"]
+    },
+    {
+        title: "Web Developer",
+        image: "imgs/web-developer.svg",
+        description: "Build and maintain websites with interactive features",
+        skills: ["HTML", "CSS", "JavaScript", "React"]
+    },
+    {
+        title: "AI/ML Engineer",
+        image: "imgs/ai.svg",
+        description: "Develop intelligent systems that learn and adapt",
+        skills: ["TensorFlow", "PyTorch", "Deep Learning", "Natural Language Processing"]
+    },
+    {
+        title: "DevOps Engineer",
+        image: "imgs/devops.svg",
+        description: "Ensure smooth collaboration between development and IT operations",
+        skills: ["Docker", "Kubernetes", "CI/CD", "Automation"]
+    },
+    {
+        title: "Network Engineer",
+        image: "imgs/network.svg",
+        description: "Plan, implement, and manage computer networks",
+        skills: ["Cisco Routing", "Switching", "Network Security", "Wireshark"]
+    },
+    {
+        title: "Product Manager",
+        image: "imgs/manager.svg",
+        description: "Lead the development and delivery of products",
+        skills: ["Agile", "Project Management", "Stakeholder Communication", "Market Research"]
+    },
+    {
+        title: "UI/UX Designer",
+        image: "imgs/ui.svg",
+        description: "Design user-friendly and visually appealing interfaces",
+        skills: ["Adobe XD", "Figma", "User Research", "Wireframing"]
+    }
+];
+
+// Initialize career cards
+function initializeCareerCards() {
+    const careerCardsContainer = document.getElementById('careerCards');
+    careerCardsContainer.innerHTML = careerPaths.map(career => `
+        <div class="career-card">
+            <img src="${career.image}" alt="${career.title}" class="card-image">
+            <div class="card-content">
+                <h3 class="card-title">${career.title}</h3>
+                <p>${career.description}</p>
+                <div class="tags">
+                    ${career.skills.map(skill => `<span class="tag">${skill}</span>`).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Tab functionality
+function showTab(tabName, event) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.style.display = 'none');
+    document.getElementById(tabName).style.display = 'block';
+
+    const tabButtons = document.querySelectorAll('.tab');
+    tabButtons.forEach(button => button.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+// Resume builder functionality
+let skills = [];
+let experiences = [];
+
+function addSkill() {
+    const skillInput = document.getElementById('skillInput');
+    if (skillInput.value.trim()) {
+        skills.push(skillInput.value.trim());
+        updateSkillsList();
+        skillInput.value = '';
+    }
+}
+
+function updateSkillsList() {
+    const skillsList = document.getElementById('skillsList');
+    skillsList.innerHTML = skills.map((skill, index) => `
+        <div class="list-item">
+            <span>${skill}</span>
+            <button type="button" class="btn" onclick="removeSkill(${index})">Remove</button>
+        </div>
+    `).join('');
+}
+
+function removeSkill(index) {
+    skills.splice(index, 1);
+    updateSkillsList();
+}
+
+function addExperience() {
+    const company = document.getElementById('companyInput').value;
+    const position = document.getElementById('positionInput').value;
+    const duration = document.getElementById('durationInput').value;
+    const description = document.getElementById('experienceDescription').value;
+
+    if (company && position) {
+        experiences.push({ company, position, duration, description });
+        updateExperienceList();
+        document.getElementById('companyInput').value = '';
+        document.getElementById('positionInput').value = '';
+        document.getElementById('durationInput').value = '';
+        document.getElementById('experienceDescription').value = '';
+    }
+}
+
+function updateExperienceList() {
+    const experienceList = document.getElementById('experienceList');
+    experienceList.innerHTML = experiences.map((exp, index) => `
+        <div class="list-item">
+            <div>
+                <strong>${exp.position}</strong> at ${exp.company}
+                <p>${exp.duration}</p>
+                <p>${exp.description}</p>
+            </div>
+            <button type="button" class="btn" onclick="removeExperience(${index})">Remove</button>
+        </div>
+    `).join('');
+}
+
+function removeExperience(index) {
+    experiences.splice(index, 1);
+    updateExperienceList();
+}
+
+function generateResume() {
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const summary = document.getElementById('summary').value;
+
+    const resumePreview = document.getElementById('resumePreview');
+    resumePreview.style.display = 'block';
+    resumePreview.innerHTML = `
+        <h2>${fullName}</h2>
+        <p>${email} | ${phone}</p>
+        <hr>
+        <h3>Professional Summary</h3>
+        <p>${summary}</p>
+        <h3>Skills</h3>
+        <div class="tags">
+            ${skills.map(skill => `<span class="tag">${skill}</span>`).join('')}
+        </div>
+        <h3>Experience</h3>
+        ${experiences.map(exp => `
+            <div class="experience-item">
+                <h4>${exp.position} at ${exp.company}</h4>
+                <p>${exp.duration}</p>
+                <p>${exp.description}</p>
+            </div>
+        `).join('')}
+    `;
+}
+
+// Initialize the page
+initializeCareerCards();
+
+        
+    </script>
+</body>
+</html>
